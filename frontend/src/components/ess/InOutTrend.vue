@@ -48,11 +48,11 @@ function draw() {
   const s = series.value, ref = (v, c) => s.map(() => v)
   chart = new Chart(el.value, {
     data: { labels: s.map(x => x.label), datasets: [
-      { type: 'line', label: 'Masuk', data: s.map(x => x.in), borderColor: '#16a34a', backgroundColor: '#16a34a', tension: .35, pointRadius: s.length > 40 ? 0 : 3, pointHoverRadius: 6, yAxisID: 'y', spanGaps: true,
-        pointBackgroundColor: s.map(x => x.in > 8.5 ? '#f59e0b' : '#16a34a') },
-      { type: 'line', label: 'Balik', data: s.map(x => x.out), borderColor: '#6366f1', backgroundColor: '#6366f1', tension: .35, pointRadius: s.length > 40 ? 0 : 3, pointHoverRadius: 6, yAxisID: 'y', spanGaps: true },
-      { type: 'line', label: '08:30', data: ref(8.5), borderColor: '#e11d48', borderDash: [6, 5], borderWidth: 1.5, pointRadius: 0, yAxisID: 'y' },
-      { type: 'line', label: '17:00', data: ref(17), borderColor: '#94a3b8', borderDash: [6, 5], borderWidth: 1.2, pointRadius: 0, yAxisID: 'y' },
+      { type: 'line', label: 'Masuk', data: s.map(x => x.in), borderColor: '#0e7c3d', backgroundColor: '#0e7c3d', tension: .35, pointRadius: s.length > 40 ? 0 : 3, pointHoverRadius: 6, yAxisID: 'y', spanGaps: true,
+        pointBackgroundColor: s.map(x => x.in > 8.5 ? '#e5bf29' : '#0e7c3d') },
+      { type: 'line', label: 'Balik', data: s.map(x => x.out), borderColor: ACC(), backgroundColor: ACC(), tension: .35, pointRadius: s.length > 40 ? 0 : 3, pointHoverRadius: 6, yAxisID: 'y', spanGaps: true },
+      { type: 'line', label: '08:30', data: ref(8.5), borderColor: '#cf2323', borderDash: [6, 5], borderWidth: 1.5, pointRadius: 0, yAxisID: 'y' },
+      { type: 'line', label: '17:00', data: ref(17), borderColor: '#868686', borderDash: [6, 5], borderWidth: 1.2, pointRadius: 0, yAxisID: 'y' },
       { type: 'bar', label: 'Jam bekerja', data: s.map(x => x.hours), backgroundColor: 'rgba(148,163,184,.18)', borderRadius: 4, yAxisID: 'y2', order: 9 },
     ] },
     options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
@@ -60,7 +60,7 @@ function draw() {
         tooltip: { filter: i => !['08:30', '17:00'].includes(i.dataset.label),
           callbacks: { label: c => c.dataset.yAxisID === 'y2' ? `Jam bekerja: ${c.raw ?? '—'} j` : `${c.dataset.label}: ${fmt(c.raw)}`,
             footer: it => { const x = s[it[0].dataIndex]; return x?.late ? `⚠ lewat${x.n > 1 ? ` (${x.late} staf)` : ''}` : '' } } } },
-      scales: { y: { min: 5, max: 21, reverse: false, ticks: { stepSize: 2, callback: v => fmt(v) }, grid: { color: '#f1f5f9' }, title: { display: true, text: 'Masa' } },
+      scales: { y: { min: 5, max: 21, reverse: false, ticks: { stepSize: 2, callback: v => fmt(v) }, grid: { color: '#f3f3f3' }, title: { display: true, text: 'Masa' } },
         y2: { position: 'right', min: 0, max: 16, grid: { display: false }, ticks: { callback: v => v + 'j' } }, x: { grid: { display: false }, ticks: { maxTicksLimit: 16 } } } },
   })
 }
@@ -70,9 +70,9 @@ watch([series], draw); onMounted(draw); onBeforeUnmount(() => chart?.destroy())
 <style scoped>
 .io-head{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}
 .io-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:10px}
-.io-stats div{background:#f8fafc;border-radius:12px;padding:8px 10px}
-.io-stats small{display:block;font-size:11px;color:var(--muted,#64748b)}.io-stats b{font-size:16px}
-.io-stats .bad{color:#e11d48}.io-stats .good{color:#16a34a}
+.io-stats div{background:var(--g50);border-radius:8px;padding:8px 10px}
+.io-stats small{display:block;font-size:11px;color:var(--muted,var(--g600))}.io-stats b{font-size:16px}
+.io-stats .bad{color:var(--bad)}.io-stats .good{color:var(--ok)}
 .io-chart{position:relative}
 @media (max-width:767.98px){ .io-stats{grid-template-columns:repeat(2,1fr)} }
 </style>

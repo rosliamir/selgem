@@ -127,28 +127,28 @@ onMounted(() => { load(); loadTrend() })
 </script>
 
 <style scoped>
-.mon{font-weight:800;min-width:150px;text-align:center;text-transform:capitalize}
+.mon{font-weight:700;min-width:150px;text-align:center;text-transform:capitalize}
 .sum{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
 .s{display:flex;gap:12px;align-items:center;padding:14px 16px}.s b{font-size:22px;display:block;line-height:1}.s small{color:var(--muted);font-size:12px}
 .g{grid-template-columns:1.5fr 1fr}
 .g2{grid-template-columns:1.2fr 1fr}
 .cal-h,.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-.cal-h span{text-align:center;font-size:11.5px;font-weight:800;color:var(--muted);padding-bottom:4px}
-.c{min-height:74px;border-radius:14px;background:#f8fafc;padding:6px 8px;display:flex;flex-direction:column;cursor:pointer;transition:transform .12s,box-shadow .12s;position:relative}
+.cal-h span{text-align:center;font-size:11.5px;font-weight:700;color:var(--muted);padding-bottom:4px}
+.c{min-height:74px;border-radius:8px;background:var(--g50);padding:6px 8px;display:flex;flex-direction:column;cursor:pointer;transition:transform .12s,box-shadow .12s;position:relative}
 .c:empty{background:transparent;cursor:default}
-.c:not(:empty):hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(16,24,40,.08)}
-.c .n{font-weight:800;font-size:13px}.c i{margin-top:auto;font-size:13px}.c small{font-size:10px;font-weight:600}
-.c.ok{background:#ecfdf5;color:#047857}.c.late{background:#fffbeb;color:#b45309}.c.leave{background:#ecfeff;color:#0e7490}
-.c.hol{background:#fff1f2;color:#be123c}.c.miss{background:#fff1f2;color:#e11d48}.c.rest{background:#f1f5f9;color:#94a3b8}.c.pend{background:#f5f3ff;color:#6d28d9}
-.c.today{box-shadow:0 0 0 2px var(--pri)}.c.sel{box-shadow:0 0 0 3px #a5b4fc}
+.c:not(:empty):hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(26,26,26,.08)}
+.c .n{font-weight:700;font-size:13px}.c i{margin-top:auto;font-size:13px}.c small{font-size:10px;font-weight:600}
+.c.ok{background:var(--ok-bg);color:var(--ok-fg)}.c.late{background:var(--warn-bg);color:var(--warn-fg)}.c.leave{background:var(--info-bg);color:var(--info-fg)}
+.c.hol{background:var(--bad-bg);color:var(--bad-fg)}.c.miss{background:var(--bad-bg);color:var(--bad)}.c.rest{background:var(--g100);color:var(--g500)}.c.pend{background:var(--blue-bg);color:var(--blue)}
+.c.today{box-shadow:0 0 0 2px var(--pri)}.c.sel{box-shadow:0 0 0 3px var(--pri-300)}
 .legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--muted)}
-.lg{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px}
-.lg.ok{background:#10b981}.lg.late{background:#f59e0b}.lg.leave{background:#06b6d4}.lg.hol{background:#f43f5e}.lg.miss{background:#e11d48}.lg.rest{background:#cbd5e1}
+.lg{display:inline-block;width:10px;height:10px;border-radius:4px;margin-right:5px}
+.lg.ok{background:#129a4d}.lg.late{background:var(--warn)}.lg.leave{background:#00b4da}.lg.hol{background:#e05959}.lg.miss{background:var(--bad)}.lg.rest{background:var(--g300)}
 .det{display:flex;gap:10px;align-items:center;padding:7px 0;font-size:13.5px;border-bottom:1px dashed var(--line)}.det b{margin-left:auto}
-.tip{margin-top:10px;border-radius:12px;padding:8px 10px;font-size:12.5px;display:flex;gap:8px}.tip.warn{background:#fff1f2;color:#be123c}
+.tip{margin-top:10px;border-radius:8px;padding:8px 10px;font-size:12.5px;display:flex;gap:8px}.tip.warn{background:var(--bad-bg);color:var(--bad-fg)}
 .log{max-height:420px;overflow:auto}
-.lr{display:flex;gap:10px;align-items:center;padding:8px 4px;border-radius:10px;font-size:13px;cursor:pointer}.lr:hover{background:#f8fafc}
-.dd{width:40px;text-align:center;line-height:1;background:#eef2ff;color:#4338ca;border-radius:10px;padding:5px 0}.dd b{display:block}.dd small{font-size:10px}
+.lr{display:flex;gap:10px;align-items:center;padding:8px 4px;border-radius:8px;font-size:13px;cursor:pointer}.lr:hover{background:var(--g50)}
+.dd{width:40px;text-align:center;line-height:1;background:var(--pri-soft);color:var(--pri-strong);border-radius:8px;padding:5px 0}.dd b{display:block}.dd small{font-size:10px}
 @media (max-width:991.98px){ .g,.g2{grid-template-columns:1fr} .sum{grid-template-columns:repeat(3,1fr)} }
 @media (max-width:767.98px){ .sum{grid-template-columns:repeat(2,1fr)} .c{min-height:56px;padding:4px 5px} .c small{display:none} .cal,.cal-h{gap:4px} }
 </style>

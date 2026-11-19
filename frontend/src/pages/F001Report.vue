@@ -38,5 +38,5 @@ onMounted(async()=>{
   acts.value=ra.filter(a=>(a.weekly_report&&(a.weekly_report.id||a.weekly_report))==w.value?.id).slice(0,30)
 })
 </script>
-<style scoped>.step-dot{width:26px;height:26px;border-radius:50%;background:#eef2f7;display:grid;place-items:center;font-size:12px}
-.step-dot.on{background:#0d6efd;color:#fff}</style>
+<style scoped>.step-dot{width:26px;height:26px;border-radius:50%;background:var(--g100);display:grid;place-items:center;font-size:12px}
+.step-dot.on{background:var(--pri);color:#fff}</style>

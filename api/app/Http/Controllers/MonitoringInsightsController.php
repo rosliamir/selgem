@@ -309,7 +309,23 @@ class MonitoringInsightsController extends Controller
         if ($dk['anomalies']) $why[] = count($dk['anomalies']) . ' sales entries look like typing errors (> 100 MT per trip) and distort reported totals';
         if ($v['themes']['rain']) $why[] = "Rain is mentioned in {$v['themes']['rain']} of {$v['notes']} daily remarks — the main operational disruption noted by site officers";
         $sev = array_count_values(array_column($actions, 'sev'));
+        $card = fn ($icon, $value, $label, $tone = 'neutral', $tip = '') => compact('icon', 'value', 'label', 'tone', 'tip');
+        $comp = $docs['compliance'] ?? 0;
+        $cw = [
+            $card('fa-solid fa-file-shield', $comp . '%', 'Documents in order · ' . count($sites) . ' sites', $comp >= 90 ? 'good' : ($comp >= 70 ? 'warn' : 'bad'), $what[0]),
+            $card('fa-solid fa-receipt', (string) $dk['total'], 'Docket incidents', $dk['total'] ? 'warn' : 'good', $what[1]),
+            $card('fa-solid fa-user-clock', (string) $lo['pending'], 'Landowner reports waiting', $lo['pending'] ? 'warn' : 'good', $what[2]),
+        ];
+        $cy = [];
+        if ($worst) $cy[] = $card('fa-solid fa-folder-minus', $worst['label'], "{$worst['missing']} missing · {$worst['stale']} outdated", 'bad', "Biggest document gap: {$worst['label']}");
+        if ($dk['causes']) $cy[] = $card('fa-solid fa-keyboard', "{$dk['causes'][0]['count']} of {$dk['total']}", 'Incidents: ' . mb_strtolower($dk['causes'][0]['label']), 'warn', 'A process / training issue, not fraud');
+        if ($dk['anomalies']) $cy[] = $card('fa-solid fa-calculator', (string) count($dk['anomalies']), 'Sales typing errors', 'bad', 'Entries above 100 MT per trip distort reported totals');
+        if ($v['themes']['rain']) $cy[] = $card('fa-solid fa-cloud-rain', "{$v['themes']['rain']} of {$v['notes']}", 'Remarks mention rain', 'neutral', 'The main disruption noted by site officers');
+        $sevIcon = ['critical' => 'fa-solid fa-circle-exclamation', 'high' => 'fa-solid fa-triangle-exclamation', 'medium' => 'fa-solid fa-circle-info', 'low' => 'fa-regular fa-lightbulb'];
+        $cd = array_map(fn ($a) => $card($sevIcon[$a['sev']] ?? 'fa-solid fa-bolt', trim(explode(' — ', preg_replace('/\s*\(.*?\)/', '', $a['title']))[0]), $a['owner'] . ' · ' . $a['cat'],
+            $a['sev'] === 'critical' ? 'bad' : ($a['sev'] === 'high' ? 'warn' : 'neutral'), $a['action']), array_slice($actions, 0, 3));
         return ['what' => $what, 'why' => $why, 'do' => array_map(fn ($a) => $a['action'] . ' — ' . $a['title'], array_slice($actions, 0, 3)),
+            'cards' => ['what' => $cw, 'why' => array_slice($cy, 0, 4), 'do' => $cd],
             'counts' => ['critical' => $sev['critical'] ?? 0, 'high' => $sev['high'] ?? 0, 'medium' => $sev['medium'] ?? 0, 'low' => $sev['low'] ?? 0],
             'tone' => ($sev['critical'] ?? 0) ? 'bad' : (($sev['high'] ?? 0) ? 'neutral' : 'good')];
     }

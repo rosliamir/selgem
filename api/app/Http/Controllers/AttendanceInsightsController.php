@@ -275,7 +275,23 @@ class AttendanceInsightsController extends Controller
         }
         if ($q['total']) $why[] = "{$q['total']} records are incomplete or contradictory — some 'late' and 'missing' figures in the old view were understated";
         $sev = array_count_values(array_column($actions, 'sev'));
+        $card = fn ($icon, $value, $label, $tone = 'neutral', $tip = '') => compact('icon', 'value', 'label', 'tone', 'tip');
+        $cw = [
+            $card('fa-solid fa-user-check', $c['rate'] . '%', "Attendance · {$c['staff']} staff", $c['rate'] >= 95 ? 'good' : ($c['rate'] >= 85 ? 'warn' : 'bad'), $what[0]),
+            $card('fa-solid fa-stopwatch', ($c['punctual'] ?? '—') . '%', 'On time · avg in ' . ($c['avg_in_txt'] ?? '—'), ($c['punctual'] ?? 0) >= 90 ? 'good' : 'warn', $what[1]),
+            $card('fa-solid fa-person-running', (string) $c['late'], 'Late arrivals', $c['late'] ? 'warn' : 'good', $what[2]),
+        ];
+        $cy = [];
+        if ($late && $c['late']) $cy[] = $card('fa-solid fa-users', round($top / $c['late'] * 100) . '%', 'of lateness from 5 staff', 'warn', 'Lateness is concentrated in a few people');
+        if ($wdw) $cy[] = $card('fa-solid fa-calendar-day', $wdw['day'], "Weakest day · {$wdw['punctual']}% on time", 'warn', '');
+        if (!empty($wo) && !empty($bo) && $bo['rate'] - $wo['rate'] >= 1) $cy[] = $card('fa-solid fa-building', $wo['key'], "Lowest attendance · {$wo['rate']}%", 'bad', '');
+        elseif (!empty($wp) && !empty($bp) && $bp['punctual'] - $wp['punctual'] >= 3) $cy[] = $card('fa-solid fa-building', $wp['key'], "Least punctual · {$wp['punctual']}%", 'bad', "{$bp['key']} is best at {$bp['punctual']}%");
+        if ($q['total']) $cy[] = $card('fa-solid fa-database', (string) $q['total'], 'Incomplete records', 'neutral', "Some 'late' and 'missing' figures in the old view were understated");
+        $sevIcon = ['critical' => 'fa-solid fa-circle-exclamation', 'high' => 'fa-solid fa-triangle-exclamation', 'medium' => 'fa-solid fa-circle-info', 'low' => 'fa-regular fa-lightbulb'];
+        $cd = array_map(fn ($a) => $card($sevIcon[$a['sev']] ?? 'fa-solid fa-bolt', trim(explode(' — ', preg_replace('/\s*\(.*?\)/', '', $a['title']))[0]), ($a['owner'] ?? 'HR') . (isset($a['cat']) ? ' · ' . $a['cat'] : ''),
+            $a['sev'] === 'critical' ? 'bad' : ($a['sev'] === 'high' ? 'warn' : 'neutral'), $a['action']), array_slice($actions, 0, 3));
         return ['what' => $what, 'why' => $why, 'do' => array_map(fn ($a) => $a['action'] . ' — ' . $a['title'], array_slice($actions, 0, 3)),
+            'cards' => ['what' => $cw, 'why' => array_slice($cy, 0, 4), 'do' => $cd],
             'counts' => ['critical' => $sev['critical'] ?? 0, 'high' => $sev['high'] ?? 0, 'medium' => $sev['medium'] ?? 0, 'low' => $sev['low'] ?? 0],
             'tone' => $c['rate'] < $p['rate'] - 3 || ($sev['high'] ?? 0) >= 2 ? 'bad' : ($c['rate'] >= 90 ? 'good' : 'neutral')];
     }

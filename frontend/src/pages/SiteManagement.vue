@@ -72,15 +72,15 @@ const permit=computed(()=>{
     const total=list.length||0
     const pct=n=> total? Math.round(n/total*100):0
     return {region,total,bars:[
-      {k:'Active',pct:pct(c.active),n:c.active,c:'#0d6efd'},
-      {k:'Warning',pct:pct(c.warning),n:c.warning,c:'#f59e0b'},
-      {k:'Expired',pct:pct(c.expired),n:c.expired,c:'#dc2626'}]}
+      {k:'Active',pct:pct(c.active),n:c.active,c:ACC()},
+      {k:'Warning',pct:pct(c.warning),n:c.warning,c:'#e5bf29'},
+      {k:'Expired',pct:pct(c.expired),n:c.expired,c:'#cf2323'}]}
   })
 })
 onMounted(async()=> sites.value=await load('sites'))
 </script>
 <style scoped>
-.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#f59e0b;vertical-align:middle}
-.code{background:#f1f5f9;color:#475569;font-size:11px;font-weight:700;padding:.1rem .4rem;border-radius:6px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--warn);vertical-align:middle}
+.code{background:var(--g100);color:var(--g700);font-size:11px;font-weight:700;padding:.1rem .4rem;border-radius:4px}
 .mono{font-family:monospace;font-size:11px}
 </style>

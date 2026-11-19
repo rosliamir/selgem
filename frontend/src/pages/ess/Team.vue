@@ -1,7 +1,6 @@
 <template>
   <div class="ess-page">
     <div class="d-flex align-items-center gap-3 mb-3 flex-wrap">
-      <span class="ic lg ic-teal"><i class="fa-solid fa-calendar-days"></i></span>
       <div class="flex-grow-1"><h1 class="ess-h1">Kalendar & Pasukan</h1><p class="ess-sub">Siapa bercuti di {{ team?.office || 'pejabat anda' }} dan cuti umum</p></div>
       <div class="d-flex gap-2 align-items-center"><button class="btn-soft" @click="shift(-1)"><i class="fa-solid fa-chevron-left"></i></button>
         <b class="mon">{{ label }}</b><button class="btn-soft" @click="shift(1)"><i class="fa-solid fa-chevron-right"></i></button></div>
@@ -13,7 +12,7 @@
           <div v-for="c in cells" :key="c.key" class="c" :class="{ hol: c.hol, today: c.today, wk: c.wk }">
             <template v-if="c.n"><span class="n">{{ c.n }}</span>
               <span v-if="c.hol" class="hl">{{ c.hol }}</span>
-              <span v-for="p in c.people.slice(0, 3)" :key="p.code + p.start_date" class="pp" :style="{ background: (p.color || '#64748b') + '22', color: p.color || '#334155' }" :title="`${p.name} — ${p.leave}${p.status === 'pending' ? ' (menunggu)' : ''}`">{{ initials(p.name) }}<i v-if="p.status === 'pending'" class="fa-solid fa-hourglass-half"></i></span>
+              <span v-for="p in c.people.slice(0, 3)" :key="p.code + p.start_date" class="pp" :style="{ background: (p.color || '#6b6b6b') + '22', color: p.color || '#3b3b3b' }" :title="`${p.name} — ${p.leave}${p.status === 'pending' ? ' (menunggu)' : ''}`">{{ initials(p.name) }}<i v-if="p.status === 'pending'" class="fa-solid fa-hourglass-half"></i></span>
               <span v-if="c.people.length > 3" class="more">+{{ c.people.length - 3 }}</span></template>
           </div>
         </div>
@@ -22,7 +21,7 @@
         <section class="ess-card">
           <h6 class="mb-2"><i class="fa-solid fa-people-group me-2 text-info"></i>Cuti pasukan bulan ini</h6>
           <div v-for="(p, i) in team?.leaves || []" :key="i" class="row1">
-            <span class="av" :style="{ background: p.color || '#64748b' }">{{ initials(p.name) }}</span>
+            <span class="av" :style="{ background: p.color || '#6b6b6b' }">{{ initials(p.name) }}</span>
             <span class="min0 flex-grow-1"><b class="ell">{{ p.name }}</b><small>{{ p.leave }} · {{ d2(p.start_date) }}{{ p.end_date !== p.start_date ? ' – ' + d2(p.end_date) : '' }}</small></span>
             <span class="st" :class="p.status === 'approved' ? 'st-approved' : 'st-pending'">{{ p.status === 'approved' ? 'Lulus' : 'Menunggu' }}</span>
           </div>
@@ -69,19 +68,19 @@ onMounted(load)
 .mon{min-width:140px;text-align:center;text-transform:capitalize}
 .g{display:grid;grid-template-columns:1.6fr 1fr;gap:16px;align-items:start}
 .cal-h,.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-.cal-h span{text-align:center;font-size:11.5px;font-weight:800;color:var(--muted)}
-.c{min-height:92px;border-radius:14px;background:#f8fafc;padding:6px;display:flex;flex-wrap:wrap;align-content:flex-start;gap:3px}
-.c:empty{background:transparent}.c.wk{background:#f1f5f9}.c.hol{background:#fff1f2}.c.today{box-shadow:0 0 0 2px var(--pri)}
-.n{width:100%;font-weight:800;font-size:12.5px}
-.hl{width:100%;font-size:10px;font-weight:700;color:#be123c;line-height:1.2}
-.pp{font-size:10px;font-weight:800;border-radius:7px;padding:2px 5px;display:inline-flex;gap:3px;align-items:center}
+.cal-h span{text-align:center;font-size:11.5px;font-weight:700;color:var(--muted)}
+.c{min-height:92px;border-radius:8px;background:var(--g50);padding:6px;display:flex;flex-wrap:wrap;align-content:flex-start;gap:3px}
+.c:empty{background:transparent}.c.wk{background:var(--g100)}.c.hol{background:var(--bad-bg)}.c.today{box-shadow:0 0 0 2px var(--pri)}
+.n{width:100%;font-weight:700;font-size:12.5px}
+.hl{width:100%;font-size:10px;font-weight:700;color:var(--bad-fg);line-height:1.2}
+.pp{font-size:10px;font-weight:700;border-radius:4px;padding:2px 5px;display:inline-flex;gap:3px;align-items:center}
 .more{font-size:10px;color:var(--muted);font-weight:700}
 .row1{display:flex;gap:10px;align-items:center;padding:7px 0;border-bottom:1px dashed var(--line);font-size:13px}.row1.past{opacity:.45}
 .row1 b{display:block;font-size:13px}.row1 small{color:var(--muted);font-size:11.5px}
 .ell{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.av{width:32px;height:32px;border-radius:50%;color:#fff;font-size:11px;font-weight:800;display:grid;place-items:center;flex-shrink:0}
-.hd{width:42px;border-radius:10px;background:#fff1f2;color:#e11d48;text-align:center;line-height:1;padding:5px 0;flex-shrink:0}.hd b{display:block;font-size:16px}.hd small{font-size:10px;font-weight:700}
-.note{margin-top:10px;font-size:12px;background:#fffbeb;color:#92400e;border-radius:10px;padding:8px 10px;display:flex;gap:8px}
+.av{width:32px;height:32px;border-radius:50%;color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center;flex-shrink:0}
+.hd{width:42px;border-radius:8px;background:var(--bad-bg);color:var(--bad);text-align:center;line-height:1;padding:5px 0;flex-shrink:0}.hd b{display:block;font-size:16px}.hd small{font-size:10px;font-weight:700}
+.note{margin-top:10px;font-size:12px;background:var(--warn-bg);color:var(--warn-fg);border-radius:8px;padding:8px 10px;display:flex;gap:8px}
 @media (max-width:991.98px){ .g{grid-template-columns:1fr} }
 @media (max-width:767.98px){ .c{min-height:60px} .hl{display:none} }
 </style>

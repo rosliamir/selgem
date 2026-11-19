@@ -16,7 +16,7 @@
         <div v-if="demo" class="err mb-3"><i class="fa-solid fa-shield-halved me-1"></i>Anda masih menggunakan kata laluan demo. Sila tukar sekarang.</div>
         <label class="f-lbl">Kata laluan semasa</label><input type="password" class="f-in mb-2" v-model="pw.current" autocomplete="current-password" />
         <label class="f-lbl">Kata laluan baharu (min. 8 aksara)</label><input type="password" class="f-in mb-2" v-model="pw.password" autocomplete="new-password" />
-        <div class="meter"><div :style="{ width: strength * 25 + '%', background: ['#e2e8f0', '#e11d48', '#f59e0b', '#22c55e', '#16a34a'][strength] }"></div></div>
+        <div class="meter"><div :style="{ width: strength * 25 + '%', background: ['#dfdfdf', '#cf2323', '#e5bf29', '#16bd5e', '#0e7c3d'][strength] }"></div></div>
         <label class="f-lbl mt-2">Sahkan kata laluan baharu</label><input type="password" class="f-in" v-model="pw.password_confirmation" autocomplete="new-password" />
         <div v-if="err" class="err mt-2">{{ err }}</div><div v-if="ok" class="ok mt-2"><i class="fa-solid fa-circle-check me-1"></i>{{ ok }}</div>
         <button class="btn-pri w-100 mt-3" :disabled="busy || pw.password.length < 8 || pw.password !== pw.password_confirmation" @click="save">Kemas kini kata laluan</button>
@@ -51,12 +51,12 @@ async function save() {
 }
 </script>
 <style scoped>
-.pf{display:flex;gap:18px;align-items:center;border-radius:26px;padding:26px;background:linear-gradient(135deg,#0f172a,#334155 55%,#4f46e5);color:#fff;box-shadow:0 20px 44px rgba(15,23,42,.3)}
-.big{width:84px;height:84px;border-radius:26px;background:linear-gradient(135deg,#818cf8,#c084fc);display:grid;place-items:center;font-size:30px;font-weight:800;flex-shrink:0;box-shadow:0 10px 24px rgba(0,0,0,.3)}
+.pf{display:flex;gap:18px;align-items:center;border-radius:16px;padding:26px;background:var(--pri-deep);color:#fff;box-shadow:0 20px 44px rgba(26,26,26,.3)}
+.big{width:84px;height:84px;border-radius:16px;background:var(--pri-soft);display:grid;place-items:center;font-size:30px;font-weight:700;flex-shrink:0;box-shadow:0 10px 24px rgba(0,0,0,.3)}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .chips span{background:rgba(255,255,255,.14);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:600;display:inline-flex;gap:6px;align-items:center;text-transform:capitalize}
 .g{display:grid;grid-template-columns:1.2fr 1fr;gap:16px;align-items:start}
 .kv{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--line);font-size:13.5px}.kv b{margin-left:auto;text-transform:capitalize;text-align:right}
-.meter{height:6px;background:#f1f5f9;border-radius:99px;overflow:hidden}.meter div{height:100%;transition:all .3s}
+.meter{height:6px;background:var(--g100);border-radius:99px;overflow:hidden}.meter div{height:100%;transition:all .3s}
 @media (max-width:991.98px){ .g{grid-template-columns:1fr} .pf{padding:20px} .big{width:64px;height:64px;font-size:22px} }
 </style>

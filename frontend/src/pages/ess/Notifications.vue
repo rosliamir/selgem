@@ -1,7 +1,6 @@
 <template>
   <div class="ess-page">
     <div class="d-flex align-items-center gap-3 mb-3 flex-wrap">
-      <span class="ic lg ic-rose"><i class="fa-solid fa-bell"></i></span>
       <div class="flex-grow-1"><h1 class="ess-h1">Notifikasi</h1><p class="ess-sub">{{ unread }} belum dibaca</p></div>
       <button class="btn-soft" :disabled="!unread" @click="readAll"><i class="fa-solid fa-check-double me-1"></i>Tandakan semua dibaca</button>
     </div>
@@ -37,9 +36,9 @@ async function readAll() { await ess.readNotifications(); refreshHome(); load() 
 onMounted(load)
 </script>
 <style scoped>
-.day{font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;padding:14px 18px 6px;background:#fafbff}
-.nt{position:relative;display:flex;gap:12px;align-items:center;width:100%;border:0;border-bottom:1px solid var(--line);background:#fff;padding:12px 18px;transition:background .12s}
-.nt:hover{background:#f8fafc}.nt.unread{background:#f7f8ff}
+.day{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--g500);padding:14px 18px 6px;background:var(--pri-soft)}
+.nt{position:relative;display:flex;gap:12px;align-items:center;width:100%;border:0;border-bottom:1px solid var(--line);background:var(--surface);padding:12px 18px;transition:background .12s}
+.nt:hover{background:var(--g50)}.nt.unread{background:var(--pri-soft)}
 .nt b{display:block;font-size:13.5px}.nt small{display:block;color:var(--muted);font-size:12.5px}
-.ud{width:8px;height:8px;border-radius:50%;background:#6366f1;flex-shrink:0}
+.ud{width:8px;height:8px;border-radius:50%;background:var(--pri);flex-shrink:0}
 </style>

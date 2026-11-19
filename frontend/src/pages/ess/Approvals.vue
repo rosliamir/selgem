@@ -1,7 +1,6 @@
 <template>
   <div class="ess-page">
     <div class="d-flex align-items-center gap-3 mb-3 flex-wrap">
-      <span class="ic lg ic-orange"><i class="fa-solid fa-stamp"></i></span>
       <div class="flex-grow-1"><h1 class="ess-h1">Kelulusan</h1><p class="ess-sub">Permohonan pasukan yang menunggu tindakan anda</p></div>
       <div class="ess-tabs"><button :class="{ on: tab === 'pending' }" @click="tab = 'pending'"><i class="fa-solid fa-inbox"></i>Menunggu <span v-if="pending.length" class="n">{{ pending.length }}</span></button>
         <button :class="{ on: tab === 'history' }" @click="tab = 'history'"><i class="fa-solid fa-clock-rotate-left"></i>Sejarah</button></div>
@@ -89,20 +88,20 @@ onMounted(load)
 <style scoped>
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
 .gap-12{gap:12px}
-.av{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#6366f1,#a855f7);color:#fff;font-weight:800;display:grid;place-items:center;flex-shrink:0}
+.av{width:44px;height:44px;border-radius:8px;background:var(--pri-soft);color:#fff;font-weight:700;display:grid;place-items:center;flex-shrink:0}
 .nm{font-size:14.5px;display:block}
-.lvl{font-size:11px;font-weight:700;background:#fff7ed;color:#c2410c;border-radius:999px;padding:3px 9px;white-space:nowrap}
-.what{display:flex;gap:10px;align-items:center;background:#f8fafc;border-radius:14px;padding:10px 12px;margin-top:12px}
-.what b{font-size:13.5px}.qty{margin-left:auto;font-weight:800;font-size:15px;white-space:nowrap}
-.reason{font-size:13px;color:#334155;margin-top:10px;display:flex;gap:8px}.reason i{color:#c7d2fe;margin-top:3px}
+.lvl{font-size:11px;font-weight:700;background:var(--hot-bg);color:var(--hot-fg);border-radius:999px;padding:3px 9px;white-space:nowrap}
+.what{display:flex;gap:10px;align-items:center;background:var(--g50);border-radius:8px;padding:10px 12px;margin-top:12px}
+.what b{font-size:13.5px}.qty{margin-left:auto;font-weight:700;font-size:15px;white-space:nowrap}
+.reason{font-size:13px;color:var(--g800);margin-top:10px;display:flex;gap:8px}.reason i{color:var(--pri-300);margin-top:3px}
 .ctx{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-.ctx span{font-size:11.5px;background:#f1f5f9;color:#475569;border-radius:8px;padding:3px 8px;display:inline-flex;gap:5px;align-items:center}
-.ctx .warn{background:#ffe4e6;color:#be123c}
+.ctx span{font-size:11.5px;background:var(--g100);color:var(--g700);border-radius:8px;padding:3px 8px;display:inline-flex;gap:5px;align-items:center}
+.ctx .warn{background:var(--bad-line);color:var(--bad-fg)}
 .acts{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
-.btn-rej{background:#e11d48;color:#fff;border:0;border-radius:12px;font-weight:700;padding:.5rem .9rem}.btn-rej:disabled{opacity:.5}
+.btn-rej{background:var(--bad);color:#fff;border:0;border-radius:8px;font-weight:700;padding:.5rem .9rem}.btn-rej:disabled{opacity:.5}
 .hist{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px dashed var(--line);font-size:13px}
-.toast2{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#0f172a;color:#fff;border-radius:14px;padding:12px 18px;font-weight:600;z-index:3000;display:flex;gap:10px;align-items:center}
-.toast2 i{color:#4ade80}
+.toast2{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--inverse);color:#fff;border-radius:8px;padding:12px 18px;font-weight:600;z-index:3000;display:flex;gap:10px;align-items:center}
+.toast2 i{color:#62db96}
 .ap-enter-from,.ap-leave-to{opacity:0;transform:scale(.97)}.ap-enter-active,.ap-leave-active{transition:all .25s}
 @media (max-width:991.98px){ .grid{grid-template-columns:1fr} }
 </style>

@@ -61,23 +61,23 @@ const users=ref([]), q=ref('')
 function roleClass(r){const t=(r||'').toLowerCase()
   return t.includes('super')?'rb-red':t.includes('auth')?'rb-blue':t.includes('site')?'rb-orange':t.includes('exec')?'rb-amber':t.includes('manager')?'rb-blue':t.includes('po')?'rb-blue':'rb-gray'}
 const filtered=computed(()=> users.value.filter(u=>!q.value||(u.username||'').toLowerCase().includes(q.value.toLowerCase())||(u.email||'').toLowerCase().includes(q.value.toLowerCase())))
-const COL={'Super Admin':'#dc2626','Authenticated':'#0d6efd','Site Officer':'#f59e0b','Executive':'#eab308','Manager':'#0d6efd','PO':'#0d6efd','Public':'#94a3b8'}
+const COL={'Super Admin':'#cf2323','Authenticated':ACC(),'Site Officer':'#e5bf29','Executive':'#e5bf29','Manager':ACC(),'PO':ACC(),'Public':'#868686'}
 const summary=computed(()=>{
   const c={}; users.value.forEach(u=>c[u.role]=(c[u.role]||0)+1)
   const order=['Super Admin','Authenticated','Site Officer','Executive','Manager','PO','Public']
   const mx=Math.max(1,...order.map(k=>c[k]||0))
-  return order.map(k=>({k,n:c[k]||0,pct:(c[k]||0)/mx*100,c:COL[k]||'#64748b'}))
+  return order.map(k=>({k,n:c[k]||0,pct:(c[k]||0)/mx*100,c:COL[k]||'#6b6b6b'}))
 })
 onMounted(async()=>{
   try{ const r=await fetch('/data/users-rich.json'); users.value=await r.json() }catch{ users.value=[] }
 })
 </script>
 <style scoped>
-.avatar2{width:40px;height:40px;border-radius:50%;background:#eef2f7;color:#475569;display:grid;place-items:center;font-weight:700;flex-shrink:0}
+.avatar2{width:40px;height:40px;border-radius:50%;background:var(--g100);color:var(--g700);display:grid;place-items:center;font-weight:700;flex-shrink:0}
 .tiny{font-size:11px}
-.rolebadge{font-size:10px;font-weight:700;padding:.15rem .45rem;border-radius:7px;letter-spacing:.03em}
-.rb-red{background:#fee2e2;color:#b91c1c}.rb-blue{background:#e0f2fe;color:#0369a1}.rb-orange{background:#ffedd5;color:#c2410c}.rb-amber{background:#fef9c3;color:#a16207}.rb-gray{background:#f1f5f9;color:#64748b}
+.rolebadge{font-size:10px;font-weight:700;padding:.15rem .45rem;border-radius:4px;letter-spacing:.03em}
+.rb-red{background:var(--bad-line);color:var(--bad-fg)}.rb-blue{background:var(--info-bg);color:var(--info-fg)}.rb-orange{background:var(--hot-bg);color:var(--hot-fg)}.rb-amber{background:var(--warn-bg);color:var(--warn-fg)}.rb-gray{background:var(--g100);color:var(--g600)}
 .chips{display:flex;flex-wrap:wrap;gap:4px}
-.chip{font-size:10px;font-weight:700;padding:.12rem .4rem;border-radius:6px}
-.chip-on{background:#334155;color:#fff}.chip-off{background:#f1f5f9;color:#94a3b8}
+.chip{font-size:10px;font-weight:700;padding:.12rem .4rem;border-radius:4px}
+.chip-on{background:var(--g800);color:#fff}.chip-off{background:var(--g100);color:var(--g500)}
 </style>

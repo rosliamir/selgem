@@ -72,19 +72,19 @@ defineExpose({ capture })
 </script>
 
 <style scoped>
-.sc-bg{position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(4px);z-index:2600;display:grid;place-items:center;padding:16px}
-.sc{width:100%;max-width:420px;background:#fff;border-radius:24px;padding:16px;box-shadow:0 40px 100px rgba(0,0,0,.4)}
+.sc-bg{position:fixed;inset:0;background:rgba(26,26,26,.6);backdrop-filter:blur(4px);z-index:2600;display:grid;place-items:center;padding:16px}
+.sc{width:100%;max-width:420px;background:var(--surface);border-radius:16px;padding:16px;box-shadow:0 40px 100px rgba(0,0,0,.4)}
 .sc-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.x{width:32px;height:32px;border:0;border-radius:50%;background:#f1f5f9}
-.frame{position:relative;aspect-ratio:1;border-radius:20px;overflow:hidden;background:#0f172a}
+.x{width:32px;height:32px;border:0;border-radius:50%;background:var(--g100)}
+.frame{position:relative;aspect-ratio:1;border-radius:12px;overflow:hidden;background:var(--inverse)}
 .frame video,.frame img{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
 .frame img{transform:none}
 .oval{position:absolute;inset:12% 20%;border:3px dashed rgba(255,255,255,.7);border-radius:50%;pointer-events:none}
-.count{position:absolute;inset:0;display:grid;place-items:center;font-size:96px;font-weight:800;color:#fff;text-shadow:0 4px 20px rgba(0,0,0,.5)}
-.err-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:#cbd5e1;text-align:center;padding:20px}
+.count{position:absolute;inset:0;display:grid;place-items:center;font-size:96px;font-weight:700;color:#fff;text-shadow:0 4px 20px rgba(0,0,0,.5)}
+.err-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--g300);text-align:center;padding:20px}
 .err-c i{font-size:40px}
-.gps{margin-top:10px;font-size:12.5px;font-weight:600;border-radius:10px;padding:7px 10px;display:flex;gap:8px;align-items:center}
-.gps.ok{background:#dcfce7;color:#15803d}.gps.wait{background:#eef2ff;color:#4338ca}.gps.none{background:#fef3c7;color:#b45309}
+.gps{margin-top:10px;font-size:12.5px;font-weight:600;border-radius:8px;padding:7px 10px;display:flex;gap:8px;align-items:center}
+.gps.ok{background:var(--ok-bg);color:var(--ok-fg)}.gps.wait{background:var(--pri-soft);color:var(--pri-strong)}.gps.none{background:var(--warn-bg);color:var(--warn-fg)}
 .sc-f{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
 .sc-enter-from,.sc-leave-to{opacity:0}.sc-enter-active,.sc-leave-active{transition:opacity .2s}
 </style>

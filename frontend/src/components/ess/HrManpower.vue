@@ -43,7 +43,7 @@ const COLS = [{ k: 'site_code', l: 'Tapak' }, { k: 'days', l: 'Hari' }, { k: 'av
 const data = ref(null), days = ref(90), sel = ref(null), sc = ref(null), ln = ref(null), sort = reactive({ k: 'avg_mt', d: -1 }); let c1, c2
 const rows = computed(() => [...(data.value?.sites || [])].sort((a, b) => { const x = a[sort.k], y = b[sort.k]; return (x == null) - (y == null) || (typeof x === 'string' ? x.localeCompare(y) : x - y) * sort.d }))
 function sortBy(k) { sort.d = sort.k === k ? -sort.d : -1; sort.k = k }
-const prodColor = v => v == null ? '#f1f5f9' : v >= 200 ? '#bbf7d0' : v >= 130 ? '#dcfce7' : v >= 100 ? '#fef9c3' : '#fee2e2'
+const prodColor = v => v == null ? '#f3f3f3' : v >= 200 ? '#b1edcb' : v >= 130 ? '#e3f9ed' : v >= 100 ? '#fef4cb' : '#f8d7d7'
 const insights = computed(() => {
   const s = data.value?.sites || []; if (!s.length) return []
   const prod = s.filter(x => x.mt_per_crew_day && x.avg_crew >= 5), hi = [...prod].sort((a, b) => b.mt_per_crew_day - a.mt_per_crew_day)[0], lo = [...prod].sort((a, b) => a.mt_per_crew_day - b.mt_per_crew_day)[0]
@@ -59,20 +59,20 @@ const insights = computed(() => {
 function drawScatter() {
   c1?.destroy(); const s = data.value?.sites || []
   c1 = new Chart(sc.value, { type: 'bubble', data: { datasets: [{ data: s.map(x => ({ x: x.avg_crew, y: x.avg_mt, r: Math.max(4, Math.min(22, (x.mt_per_crew_day || 0) / 15)), site: x })),
-      backgroundColor: s.map(x => (x.unsupervised_days / x.days > .5 ? 'rgba(225,29,72,.45)' : 'rgba(79,70,229,.45)')), borderColor: '#fff' }] },
+      backgroundColor: s.map(x => (x.unsupervised_days / x.days > .5 ? 'rgba(207,35,35,.45)' : 'rgba(107,79,235,.45)')), borderColor: '#fff' }] },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false },
         tooltip: { callbacks: { label: c => { const x = c.raw.site; return `${x.site_code}: ${x.avg_crew} pekerja, ${x.avg_mt.toLocaleString()} MT/hari, ${x.mt_per_crew_day} MT/pekerja` } } } },
       onClick: (e, el) => el.length && pick(el[0].element.$context.raw.site),
-      scales: { x: { title: { display: true, text: 'Purata pekerja kontraktor / hari' }, grid: { color: '#f1f5f9' } }, y: { title: { display: true, text: 'Purata MT / hari' }, grid: { color: '#f1f5f9' } } } } })
+      scales: { x: { title: { display: true, text: 'Purata pekerja kontraktor / hari' }, grid: { color: '#f3f3f3' } }, y: { title: { display: true, text: 'Purata MT / hari' }, grid: { color: '#f3f3f3' } } } } })
 }
 function drawLine() {
   c2?.destroy(); if (!sel.value) return; const s = sel.value.series
   c2 = new Chart(ln.value, { data: { labels: s.map(x => x.date.slice(5)), datasets: [
-    { type: 'bar', label: 'Jualan (MT)', data: s.map(x => x.mt), backgroundColor: '#c7d2fe', borderRadius: 3, yAxisID: 'y' },
-    { type: 'line', label: 'Pekerja kontraktor', data: s.map(x => x.crew), borderColor: '#16a34a', tension: .3, pointRadius: 0, yAxisID: 'y2' },
-    { type: 'line', label: 'Staf KSSB', data: s.map(x => x.staff), borderColor: '#f59e0b', stepped: true, pointRadius: 0, yAxisID: 'y2' }] },
+    { type: 'bar', label: 'Jualan (MT)', data: s.map(x => x.mt), backgroundColor: '#c8bdf7', borderRadius: 3, yAxisID: 'y' },
+    { type: 'line', label: 'Pekerja kontraktor', data: s.map(x => x.crew), borderColor: '#0e7c3d', tension: .3, pointRadius: 0, yAxisID: 'y2' },
+    { type: 'line', label: 'Staf KSSB', data: s.map(x => x.staff), borderColor: '#e5bf29', stepped: true, pointRadius: 0, yAxisID: 'y2' }] },
     options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 8 } } },
-      scales: { y: { grid: { color: '#f1f5f9' } }, y2: { position: 'right', grid: { display: false } }, x: { grid: { display: false }, ticks: { maxTicksLimit: 12 } } } } })
+      scales: { y: { grid: { color: '#f3f3f3' } }, y2: { position: 'right', grid: { display: false } }, x: { grid: { display: false }, ticks: { maxTicksLimit: 12 } } } } })
 }
 function pick(s) { sel.value = s; nextTick(drawLine) }
 async function load() { data.value = await apiGet(`hr/manpower?days=${days.value}`); await nextTick(); drawScatter(); pick(rows.value[0]) }
@@ -80,14 +80,14 @@ watch(days, load); onMounted(load); onBeforeUnmount(() => { c1?.destroy(); c2?.d
 </script>
 <style scoped>
 .ins-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
-.ins{display:flex;gap:10px;align-items:flex-start;background:linear-gradient(135deg,#ecfdf5,#eff6ff);border-radius:14px;padding:10px 12px;font-size:12.5px;color:#14532d}.ins i{color:#059669;margin-top:2px}
+.ins{display:flex;gap:10px;align-items:flex-start;background:var(--pri-soft);border-radius:8px;padding:10px 12px;font-size:12.5px;color:var(--ok-fg)}.ins i{color:var(--ok);margin-top:2px}
 .g{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.hint{font-size:12px;color:#64748b;margin-bottom:6px}.ch{position:relative;height:320px}
-.tb th{font-size:11px;text-transform:uppercase;color:#94a3b8;cursor:pointer;white-space:nowrap}.tb td{font-size:13px;vertical-align:middle}
-.tb tbody tr{cursor:pointer}.tb tbody tr.on td{background:#eef2ff}
-.pill-p{border-radius:7px;padding:2px 8px;font-weight:800}
-.rbar{display:inline-block;width:50px;height:6px;background:#f1f5f9;border-radius:99px;margin-right:6px;vertical-align:middle;overflow:hidden}.rbar i{display:block;height:100%;background:#16a34a}
-.warn{color:#d97706;font-weight:700}.bad{color:#e11d48;font-weight:800}
+.hint{font-size:12px;color:var(--g600);margin-bottom:6px}.ch{position:relative;height:320px}
+.tb th{font-size:11px;text-transform:uppercase;color:var(--g500);cursor:pointer;white-space:nowrap}.tb td{font-size:13px;vertical-align:middle}
+.tb tbody tr{cursor:pointer}.tb tbody tr.on td{background:var(--pri-soft)}
+.pill-p{border-radius:4px;padding:2px 8px;font-weight:700}
+.rbar{display:inline-block;width:50px;height:6px;background:var(--g100);border-radius:99px;margin-right:6px;vertical-align:middle;overflow:hidden}.rbar i{display:block;height:100%;background:var(--ok)}
+.warn{color:var(--warn-fg);font-weight:700}.bad{color:var(--bad);font-weight:700}
 @media (max-width:1199.98px){ .ins-row{grid-template-columns:1fr 1fr} .g{grid-template-columns:1fr} }
 @media (max-width:767.98px){ .ins-row{grid-template-columns:1fr} }
 </style>

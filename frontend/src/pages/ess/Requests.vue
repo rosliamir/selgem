@@ -1,7 +1,6 @@
 <template>
   <div class="ess-page">
     <div class="head">
-      <span class="ic lg" :style="{ background: T.bg, color: T.color }"><i :class="T.icon"></i></span>
       <div class="flex-grow-1 min0"><h1 class="ess-h1">{{ T.title }}</h1><p class="ess-sub">{{ T.sub }}</p></div>
       <button v-if="type" class="btn-pri" @click="openForm(type)"><i class="fa-solid fa-plus me-2"></i>Mohon {{ T.short }}</button>
       <div v-else class="d-flex gap-2 flex-wrap">
@@ -56,7 +55,7 @@ const META = {
   timeoff: { title: 'Time-off (keluar sementara)', short: 'time-off', sub: 'Maksimum 4 jam setiap slip dan 2 slip sebulan' },
   claim: { title: 'Tuntutan', short: 'tuntutan', sub: 'Perbatuan, perjalanan, makan, perubatan — hantar dalam 30 hari dengan resit' },
 }
-const T = computed(() => type.value ? { ...TYPE[type.value], ...META[type.value] } : { icon: 'fa-solid fa-folder-open', color: '#475569', bg: '#f1f5f9', title: 'Semua Permohonan', sub: 'Cuti, OT, time-off dan tuntutan anda di satu tempat' })
+const T = computed(() => type.value ? { ...TYPE[type.value], ...META[type.value] } : { icon: 'fa-solid fa-folder-open', color: '#525252', bg: '#f3f3f3', title: 'Semua Permohonan', sub: 'Cuti, OT, time-off dan tuntutan anda di satu tempat' })
 const TABS = [{ k: 'all', l: 'Semua', i: 'fa-solid fa-layer-group' }, { k: 'pending', l: 'Dalam proses', i: 'fa-solid fa-hourglass-half' },
   { k: 'approved', l: 'Lulus', i: 'fa-solid fa-circle-check' }, { k: 'rejected', l: 'Ditolak', i: 'fa-solid fa-circle-xmark' }, { k: 'cancelled', l: 'Batal', i: 'fa-solid fa-ban' }]
 const rows = ref([]), balances = ref([]), tab = ref('all'), loading = ref(false), msg = ref('')
@@ -107,8 +106,8 @@ onBeforeUnmount(() => window.removeEventListener('ess-submitted', onSubmitted))
 .bal-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 .bal{display:flex;gap:12px;align-items:center;padding:14px;cursor:pointer;text-align:left}
 .bal b{display:block;font-size:13.5px}.bal small{display:block;color:var(--muted);font-size:11.5px}
-.big{font-size:26px;font-weight:800;white-space:nowrap}.big small{font-size:13px;color:#94a3b8}
-.bar{display:flex;height:6px;background:#f1f5f9;border-radius:99px;overflow:hidden;margin-top:6px}.bar div{height:100%}
+.big{font-size:26px;font-weight:700;white-space:nowrap}.big small{font-size:13px;color:var(--g500)}
+.bar{display:flex;height:6px;background:var(--g100);border-radius:99px;overflow:hidden;margin-top:6px}.bar div{height:100%}
 .info{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 .inf{display:flex;gap:10px;align-items:center;padding:12px 14px}.inf b{display:block;font-size:17px}.inf small{color:var(--muted);font-size:11.5px}
 .list{display:flex;flex-direction:column;gap:10px}

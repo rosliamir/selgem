@@ -7,7 +7,9 @@
 
     <!-- center glass sign-in card (the timeline + project stats are part of the background video) -->
     <div class="glass card">
-      <img src="/img/kssb.png" class="mx-auto d-block mb-4" style="height:120px"/>
+      <img src="/img/kssb.png" class="mx-auto d-block mb-3" style="height:84px" alt="KSSB"/>
+      <h1 class="ltitle">Smart Monitoring System</h1>
+      <p class="lsub">Sign in to continue</p>
       <label class="glbl">Email / Staff code</label>
       <input class="form-control mb-3" v-model="u" placeholder="e.g. KS0123" />
       <label class="glbl">Password</label>
@@ -36,12 +38,13 @@ async function login(){
 <style scoped>
 .login-bg{position:fixed;inset:0;background:#0a141e;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.overlay{position:absolute;inset:0;background:rgba(10,20,30,.35)}
-.glass{position:relative;z-index:3;width:400px;max-width:92vw;padding:30px 34px;background:rgba(255,255,255,.14);
-  backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.25);border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
-.glbl{color:#fff;font-weight:600;font-size:14px;margin-bottom:5px;display:block}
-.lerr{background:rgba(225,29,72,.85);color:#fff;border-radius:10px;padding:8px 12px;font-size:13px;margin-bottom:12px}
-.lhint{color:rgba(255,255,255,.8);font-size:12px;text-align:center;margin-top:14px}
-.glass .form-control{border:0;border-radius:10px;height:44px}
+.overlay{position:absolute;inset:0;background:rgba(26,26,26,.45)}
+.glass{position:relative;z-index:3;width:420px;max-width:92vw;padding:32px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-lg)}
+.ltitle{font-size:22px;font-weight:700;text-align:center;margin:0;color:var(--heading)}
+.lsub{text-align:center;color:var(--muted);font-size:14px;margin:4px 0 24px}
+.glbl{color:var(--g800);font-weight:600;font-size:14px;margin-bottom:6px;display:block}
+.lerr{background:var(--bad-bg);color:var(--bad-fg);border:1px solid var(--bad-line);border-radius:8px;padding:8px 12px;font-size:13px;margin-bottom:12px}
+.lhint{color:var(--muted);font-size:12.5px;text-align:center;margin-top:16px}
+.glass .form-control{height:44px}
 .powered-in{color:rgba(255,255,255,.75);font-size:11px;font-style:italic}
 </style>

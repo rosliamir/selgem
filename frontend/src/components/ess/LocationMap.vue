@@ -26,7 +26,7 @@ const L = () => window.L
 const ESRI = p => `https://server.arcgisonline.com/ArcGIS/rest/services/${p}/MapServer/tile/{z}/{y}/{x}`
 
 const FLAG = { same_spot: '👥 titik & masa sama dengan staf lain', low_accuracy: '📶 GPS kurang tepat', no_gps: '🚫 tiada GPS', no_photo: '📷 tiada selfie' }
-function color(p) { return p.outside ? '#e11d48' : p.late ? '#f59e0b' : '#16a34a' }
+function color(p) { return p.outside ? '#cf2323' : p.late ? '#e5bf29' : '#0e7c3d' }
 function popup(p) {
   return `<div class="lm-pop"><b>${p.name || ''}</b>${p.code ? ` <small>${p.code} · ${p.office}</small>` : ''}
     <div>${p.date} · masuk <b>${p.tin || '—'}</b> · keluar <b>${p.tout || '—'}</b></div>
@@ -38,21 +38,21 @@ function popup(p) {
 function draw() {
   if (!map) return
   ;[pins, heat, siteLayer, fenceLayer].forEach(l => l && map.removeLayer(l))
-  siteLayer = L().layerGroup(props.sites.map(s => L().circleMarker([s.lat, s.lng], { radius: 5, color: '#475569', weight: 2, fillColor: '#fff', fillOpacity: 1 })
+  siteLayer = L().layerGroup(props.sites.map(s => L().circleMarker([s.lat, s.lng], { radius: 5, color: '#525252', weight: 2, fillColor: '#fff', fillOpacity: 1 })
     .bindTooltip(`<b>${s.site_code}</b><br><small>${s.name || ''}</small>`))).addTo(map)
   const offices = props.offices.map(o => L().marker([+o.lat, +o.lng], { icon: L().divIcon({ className: '', iconSize: [30, 30], iconAnchor: [15, 15], html: `<div class="lm-off"><i class="fa-solid fa-building"></i></div>` }) })
     .bindTooltip(`<b>${o.code}</b> ${o.name}<br><small>geofence ${o.radius} m</small>`))
   siteLayer.addLayer(L().layerGroup(offices))
   if (fence.value) fenceLayer = L().layerGroup([
-    ...props.sites.filter(s => (s.radius ?? props.fenceM) > 0).map(s => L().circle([s.lat, s.lng], { radius: s.radius ?? props.fenceM, color: '#6366f1', weight: 1, dashArray: '4 4', fillOpacity: .05 })),
-    ...props.offices.map(o => L().circle([+o.lat, +o.lng], { radius: o.radius, color: '#7c3aed', weight: 1.5, dashArray: '4 4', fillOpacity: .08 }))]).addTo(map)
+    ...props.sites.filter(s => (s.radius ?? props.fenceM) > 0).map(s => L().circle([s.lat, s.lng], { radius: s.radius ?? props.fenceM, color: ACC(), weight: 1, dashArray: '4 4', fillOpacity: .05 })),
+    ...props.offices.map(o => L().circle([+o.lat, +o.lng], { radius: o.radius, color: '#0269d0', weight: 1.5, dashArray: '4 4', fillOpacity: .08 }))]).addTo(map)
   if (view.value === 'heat' && L().heatLayer) {
     heat = L().heatLayer(props.points.map(p => [p.loc.lat, p.loc.lng, p.late ? 1 : .6]), { radius: 28, blur: 22, maxZoom: 13,
-      gradient: { .2: '#38bdf8', .45: '#22c55e', .7: '#f59e0b', 1: '#e11d48' } }).addTo(map)
+      gradient: { .2: '#49d2ef', .45: '#16bd5e', .7: '#e5bf29', 1: '#cf2323' } }).addTo(map)
   } else {
     pins = L().markerClusterGroup({ maxClusterRadius: 40, showCoverageOnHover: false, spiderfyOnMaxZoom: true,
       iconCreateFunction: c => { const n = c.getChildCount(), late = c.getAllChildMarkers().filter(m => m.options.p.late).length
-        return L().divIcon({ className: '', iconSize: [40, 40], html: `<div class="lm-cl" style="background:conic-gradient(#f59e0b 0 ${late / n * 360}deg,#16a34a 0)"><span>${n}</span></div>` }) } })
+        return L().divIcon({ className: '', iconSize: [40, 40], html: `<div class="lm-cl" style="background:conic-gradient(#e5bf29 0 ${late / n * 360}deg,#0e7c3d 0)"><span>${n}</span></div>` }) } })
     props.points.forEach(p => {
       const site = p.loc.precision === 'site'
       const icon = L().divIcon({ className: '', iconSize: [26, 26], iconAnchor: [13, 13],
@@ -89,28 +89,28 @@ defineExpose({ focus: (lat, lng) => map?.flyTo([lat, lng], 15) })
 </script>
 
 <style scoped>
-.lm{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line,#eef0f4)}
+.lm{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line,var(--g200))}
 .lm-map{position:absolute;inset:0;z-index:1}
-.lm-tools{position:absolute;top:10px;right:10px;z-index:500;display:flex;gap:4px;background:rgba(255,255,255,.92);border-radius:12px;padding:4px;box-shadow:0 4px 14px rgba(15,23,42,.15)}
-.lm-tools button{border:0;background:transparent;border-radius:9px;padding:5px 9px;font-size:12px;font-weight:700;color:#475569;display:flex;gap:5px;align-items:center}
-.lm-tools button.on{background:#4f46e5;color:#fff}
-.lm-legend{position:absolute;left:10px;bottom:10px;z-index:500;display:flex;gap:10px;flex-wrap:wrap;background:rgba(255,255,255,.92);border-radius:10px;padding:5px 10px;font-size:11px;color:#475569;max-width:calc(100% - 20px)}
+.lm-tools{position:absolute;top:10px;right:10px;z-index:500;display:flex;gap:4px;background:color-mix(in srgb,var(--surface) 92%,transparent);border-radius:8px;padding:4px;box-shadow:0 4px 14px rgba(26,26,26,.15)}
+.lm-tools button{border:0;background:transparent;border-radius:8px;padding:5px 9px;font-size:12px;font-weight:700;color:var(--g700);display:flex;gap:5px;align-items:center}
+.lm-tools button.on{background:var(--pri);color:#fff}
+.lm-legend{position:absolute;left:10px;bottom:10px;z-index:500;display:flex;gap:10px;flex-wrap:wrap;background:color-mix(in srgb,var(--surface) 92%,transparent);border-radius:8px;padding:5px 10px;font-size:11px;color:var(--g700);max-width:calc(100% - 20px)}
 .d{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;vertical-align:-1px}
-.d.ok{background:#16a34a}.d.late{background:#f59e0b}.d.out{background:#e11d48}.d.ring{border:2px dashed #475569}.d.gps{border:2px solid #475569}
-.lm-empty{position:absolute;inset:0;z-index:400;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#64748b;background:rgba(248,250,252,.7);font-weight:600;pointer-events:none}
-.lm-empty i{font-size:30px;color:#a5b4fc}
+.d.ok{background:var(--ok)}.d.late{background:var(--warn)}.d.out{background:var(--bad)}.d.ring{border:2px dashed var(--g700)}.d.gps{border:2px solid var(--g700)}
+.lm-empty{position:absolute;inset:0;z-index:400;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--g600);background:rgba(248,250,252,.7);font-weight:600;pointer-events:none}
+.lm-empty i{font-size:30px;color:var(--pri-300)}
 @media (max-width:767.98px){ .lm-tools span{display:none} .lm-legend{font-size:10px;gap:6px} }
 </style>
 <style>
-.lm-pin{width:26px;height:26px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-size:11px;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.35);position:relative;transition:transform .15s}
+.lm-pin{width:26px;height:26px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-size:11px;border:3px solid var(--surface);box-shadow:0 2px 8px rgba(0,0,0,.35);position:relative;transition:transform .15s}
 .lm-pin.site{border-style:dashed;border-color:#fff}
 .lm-pin:hover{transform:scale(1.25)}
-.lm-pin span{position:absolute;top:100%;left:50%;transform:translate(-50%,3px);background:#fff;color:#0f172a;font-size:9.5px;font-weight:800;border-radius:5px;padding:0 4px;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.2)}
-.lm-out{width:18px;height:18px;border-radius:6px;background:#0f172a;color:#fff;font-size:8px;display:grid;place-items:center;border:2px solid #fff}
+.lm-pin span{position:absolute;top:100%;left:50%;transform:translate(-50%,3px);background:var(--surface);color:var(--g1000);font-size:9.5px;font-weight:700;border-radius:4px;padding:0 4px;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.lm-out{width:18px;height:18px;border-radius:4px;background:var(--inverse);color:#fff;font-size:8px;display:grid;place-items:center;border:2px solid var(--surface)}
 .lm-cl{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;box-shadow:0 3px 10px rgba(0,0,0,.3)}
-.lm-cl span{width:30px;height:30px;border-radius:50%;background:#fff;display:grid;place-items:center;font-weight:800;font-size:12px}
+.lm-cl span{width:30px;height:30px;border-radius:50%;background:var(--surface);display:grid;place-items:center;font-weight:700;font-size:12px}
 .lm-pop{font-family:Inter,system-ui,sans-serif;font-size:12.5px;line-height:1.45;min-width:200px}
-.lm-pop small{color:#64748b}.lm-pop .fl{display:inline-block;font-size:11px;background:#fff7ed;color:#c2410c;border-radius:6px;padding:1px 6px;margin:3px 3px 0 0}
-.lm-pop .ph{display:flex;gap:6px;margin-top:6px}.lm-pop .ph a{text-align:center;color:#64748b;text-decoration:none}.lm-pop .ph img{width:72px;height:72px;object-fit:cover;border-radius:10px;display:block}
-.lm-off{width:30px;height:30px;border-radius:10px;background:#7c3aed;color:#fff;display:grid;place-items:center;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.35)}.lm-pop .w{color:#b45309;font-weight:700}.lm-pop .m{color:#475569;margin-top:3px}.lm-pop .r{color:#e11d48}
+.lm-pop small{color:var(--g600)}.lm-pop .fl{display:inline-block;font-size:11px;background:var(--hot-bg);color:var(--hot-fg);border-radius:4px;padding:1px 6px;margin:3px 3px 0 0}
+.lm-pop .ph{display:flex;gap:6px;margin-top:6px}.lm-pop .ph a{text-align:center;color:var(--g600);text-decoration:none}.lm-pop .ph img{width:72px;height:72px;object-fit:cover;border-radius:8px;display:block}
+.lm-off{width:30px;height:30px;border-radius:8px;background:var(--blue);color:#fff;display:grid;place-items:center;border:3px solid var(--surface);box-shadow:0 2px 8px rgba(0,0,0,.35)}.lm-pop .w{color:var(--warn-fg);font-weight:700}.lm-pop .m{color:var(--g700);margin-top:3px}.lm-pop .r{color:var(--bad)}
 </style>

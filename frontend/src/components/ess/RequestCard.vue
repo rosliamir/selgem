@@ -40,15 +40,15 @@ const short = n => (n || '').split(' ').slice(0, 2).join(' ')
 </script>
 
 <style scoped>
-.rc{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 16px}
+.rc{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
 .t{font-size:14.5px}
 .meta{font-size:12.5px;color:var(--muted);margin-top:3px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-.q{background:#f1f5f9;color:#334155;border-radius:7px;padding:1px 8px;font-weight:700}
-.reason{font-size:13px;color:#475569;margin-top:6px;font-style:italic}
-.att{font-size:12px;color:#4338ca;margin-top:4px;display:flex;gap:6px;align-items:center}
+.q{background:var(--g100);color:var(--g800);border-radius:4px;padding:1px 8px;font-weight:700}
+.reason{font-size:13px;color:var(--g700);margin-top:6px;font-style:italic}
+.att{font-size:12px;color:var(--pri-strong);margin-top:4px;display:flex;gap:6px;align-items:center}
 .tl{flex-wrap:wrap;row-gap:6px}
-.tl-step small{font-size:10.5px;color:#94a3b8}
-.cmt{margin-top:8px;font-size:12.5px;background:#f8fafc;border-radius:10px;padding:6px 10px;color:#334155;display:flex;gap:8px;align-items:baseline}
-.cx{border:0;background:#fff1f2;color:#e11d48;width:34px;height:34px;border-radius:10px;flex-shrink:0;transition:all .15s}
-.cx:hover{background:#e11d48;color:#fff}
+.tl-step small{font-size:10.5px;color:var(--g500)}
+.cmt{margin-top:8px;font-size:12.5px;background:var(--g50);border-radius:8px;padding:6px 10px;color:var(--g800);display:flex;gap:8px;align-items:baseline}
+.cx{border:0;background:var(--bad-bg);color:var(--bad);width:34px;height:34px;border-radius:8px;flex-shrink:0;transition:all .15s}
+.cx:hover{background:var(--bad);color:#fff}
 </style>

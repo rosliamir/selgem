@@ -1,7 +1,6 @@
 <template>
   <div class="ess-page">
     <div class="d-flex align-items-center gap-3 mb-3 flex-wrap">
-      <span class="ic lg ic-amber"><i class="fa-solid fa-bullhorn"></i></span>
       <div class="flex-grow-1"><h1 class="ess-h1">Memo Syarikat</h1><p class="ess-sub">Pengumuman rasmi daripada pengurusan dan HR</p></div>
       <button v-if="isHr" class="btn-pri" @click="compose = true; sel = null"><i class="fa-solid fa-pen-to-square me-2"></i>Terbit memo</button>
     </div>
@@ -90,16 +89,16 @@ onBeforeUnmount(() => window.removeEventListener('resize', onR))
 <style scoped>
 .wrap{display:grid;grid-template-columns:420px 1fr;gap:16px;align-items:start}
 .lst{display:flex;flex-direction:column;gap:8px}
-.mi{position:relative;display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);background:#fff;border-radius:16px;padding:12px}
-.mi.on{border-color:#a5b4fc;box-shadow:0 0 0 3px rgba(99,102,241,.12)}.mi.unread{background:#fffdf5}
+.mi{position:relative;display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:12px}
+.mi.on{border-color:var(--pri-300);box-shadow:0 0 0 3px color-mix(in srgb,var(--pri) 12%,transparent)}.mi.unread{background:var(--warn-bg)}
 .mi b{font-size:13.5px}.ex{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:12px;color:var(--muted);margin-top:2px}
-.meta{display:block;font-size:11px;color:#94a3b8;margin-top:4px}
+.meta{display:block;font-size:11px;color:var(--g500);margin-top:4px}
 .ell{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pr{font-size:10px;font-weight:800;border-radius:6px;padding:1px 6px}.pr.important{background:#fef3c7;color:#b45309}.pr.urgent{background:#ffe4e6;color:#be123c}
-.ud{position:absolute;top:12px;right:12px;width:9px;height:9px;border-radius:50%;background:#f59e0b}
+.pr{font-size:10px;font-weight:700;border-radius:4px;padding:1px 6px}.pr.important{background:var(--warn-bg);color:var(--warn-fg)}.pr.urgent{background:var(--bad-line);color:var(--bad-fg)}
+.ud{position:absolute;top:12px;right:12px;width:9px;height:9px;border-radius:50%;background:var(--warn)}
 .det{min-height:420px}
-.body{white-space:pre-wrap;line-height:1.7;font-size:14.5px;color:#1e293b;margin-top:10px}
-.ack{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:18px;background:#fffbeb;border:1px solid #fde68a;border-radius:14px;padding:12px 14px;color:#92400e}
-.ack.done{background:#f0fdf4;border-color:#bbf7d0;color:#15803d}
+.body{white-space:pre-wrap;line-height:1.7;font-size:14.5px;color:var(--g900);margin-top:10px}
+.ack{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:18px;background:var(--warn-bg);border:1px solid var(--warn-line);border-radius:8px;padding:12px 14px;color:var(--warn-fg)}
+.ack.done{background:var(--ok-bg);border-color:var(--ok-line);color:var(--ok-fg)}
 @media (max-width:991.98px){ .wrap{grid-template-columns:1fr} .hide{display:none!important} }
 </style>

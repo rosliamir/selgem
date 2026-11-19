@@ -44,11 +44,11 @@ function flash(t) { msg.value = t; setTimeout(() => msg.value = '', 2000) }
 function draw() {
   if (!map) return; layer?.clearLayers()
   sites.value.forEach(s => {
-    if (s.geofence_m > 0) L().circle([s.lat, s.lng], { radius: s.geofence_m, color: '#f59e0b', weight: 1, fillOpacity: .06 }).addTo(layer)
-    L().circleMarker([s.lat, s.lng], { radius: 4, color: '#b45309', fillColor: '#fff', fillOpacity: 1, weight: 2 }).bindTooltip(`<b>${s.site_code}</b> · ${s.geofence_m} m`).addTo(layer)
+    if (s.geofence_m > 0) L().circle([s.lat, s.lng], { radius: s.geofence_m, color: '#e5bf29', weight: 1, fillOpacity: .06 }).addTo(layer)
+    L().circleMarker([s.lat, s.lng], { radius: 4, color: '#7e6917', fillColor: '#fff', fillOpacity: 1, weight: 2 }).bindTooltip(`<b>${s.site_code}</b> · ${s.geofence_m} m`).addTo(layer)
   })
   offices.value.filter(o => o.lat).forEach(o => {
-    L().circle([+o.lat, +o.lng], { radius: o.radius_m, color: '#7c3aed', weight: 2, dashArray: '5 4', fillOpacity: o.active ? .12 : .02 }).addTo(layer)
+    L().circle([+o.lat, +o.lng], { radius: o.radius_m, color: '#0269d0', weight: 2, dashArray: '5 4', fillOpacity: o.active ? .12 : .02 }).addTo(layer)
     L().marker([+o.lat, +o.lng], { draggable: canEdit.value, icon: L().divIcon({ className: '', iconSize: [30, 30], iconAnchor: [15, 15], html: '<div class="lm-off"><i class="fa-solid fa-building"></i></div>' }) })
       .bindTooltip(`<b>${o.code}</b> ${o.radius_m} m`).on('dragend', e => { const p = e.target.getLatLng(); Object.assign(o, { lat: p.lat.toFixed(6), lng: p.lng.toFixed(6) }); saveOffice(o) }).addTo(layer)
   })
@@ -74,19 +74,19 @@ onBeforeUnmount(() => map?.remove())
 </script>
 <style scoped>
 .gf{display:grid;grid-template-columns:1fr 380px;gap:12px}
-.map-wrap{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line,#eef0f4);min-height:620px}
+.map-wrap{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line,var(--g200));min-height:620px}
 .map{position:absolute;inset:0}
-.hint-p{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:500;background:#0f172a;color:#fff;border-radius:12px;padding:8px 12px;font-size:13px;display:flex;align-items:center}
-.hint{font-size:12px;color:#64748b;margin-bottom:8px}
-.off{border:1px solid var(--line,#eef0f4);border-radius:14px;padding:10px 12px;margin-bottom:8px}.off.unset{background:#fffbeb;border-color:#fde68a}
-.rv{font-weight:800;font-size:12.5px;width:60px;text-align:right}
+.hint-p{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:500;background:var(--inverse);color:#fff;border-radius:8px;padding:8px 12px;font-size:13px;display:flex;align-items:center}
+.hint{font-size:12px;color:var(--g600);margin-bottom:8px}
+.off{border:1px solid var(--line,var(--g200));border-radius:8px;padding:10px 12px;margin-bottom:8px}.off.unset{background:var(--warn-bg);border-color:var(--warn-line)}
+.rv{font-weight:700;font-size:12.5px;width:60px;text-align:right}
 .sm{padding:.3rem .6rem!important;font-size:12px!important}
 .sw{position:relative;width:36px;height:20px}.sw input{position:absolute;opacity:0;inset:0;z-index:1;margin:0;cursor:pointer}
-.sw i{position:absolute;inset:0;background:#cbd5e1;border-radius:99px;transition:.2s}.sw i::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:.2s}
-.sw input:checked+i{background:#7c3aed}.sw input:checked+i::after{transform:translateX(16px)}
+.sw i{position:absolute;inset:0;background:var(--g300);border-radius:99px;transition:.2s}.sw i::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--surface);transition:.2s}
+.sw input:checked+i{background:var(--blue)}.sw input:checked+i::after{transform:translateX(16px)}
 .q{width:120px;padding:.3rem .6rem;font-size:12.5px}
 .sites{max-height:300px;overflow:auto}
-.st{display:grid;grid-template-columns:80px 1fr 80px 14px;gap:8px;align-items:center;padding:5px 4px;border-radius:8px;cursor:pointer;font-size:13px}.st:hover{background:#f8fafc}
+.st{display:grid;grid-template-columns:80px 1fr 80px 14px;gap:8px;align-items:center;padding:5px 4px;border-radius:8px;cursor:pointer;font-size:13px}.st:hover{background:var(--g50)}
 .r{padding:.25rem .5rem;font-size:12.5px;text-align:right}
 .ell{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 @media (max-width:1199.98px){ .gf{grid-template-columns:1fr} .map-wrap{min-height:400px} }

@@ -499,7 +499,26 @@ class InsightsController extends Controller
         }
         $sev = array_count_values(array_column($actions, 'sev'));
         foreach (array_slice($actions, 0, 3) as $a) $do[] = $a['action'] . ' — ' . $a['title'];
-        return ['what' => $what, 'why' => $why, 'do' => $do,
+        // compact cards for the briefing strip: icon + figure + a few words (full sentence kept as tooltip)
+        $short = fn ($n) => abs($n) >= 1e6 ? round($n / 1e6, 2) . 'M' : (abs($n) >= 1e3 ? round($n / 1e3) . 'K' : (string) round($n));
+        $card = fn ($icon, $value, $label, $tone = 'neutral', $tip = '') => compact('icon', 'value', 'label', 'tone', 'tip');
+        $fIcon = ['op_h' => 'fa-solid fa-clock', 'reports' => 'fa-solid fa-file-circle-xmark', 'rain' => 'fa-solid fa-cloud-rain', 'manpower' => 'fa-solid fa-user-slash',
+            'edocket' => 'fa-solid fa-plug-circle-xmark', 'cctv' => 'fa-solid fa-video-slash', 'trips' => 'fa-solid fa-truck', 'demand' => 'fa-solid fa-tags'];
+        $cw = [$card('fa-solid fa-coins', $short($c['sales']) . ' MT', ($partial ? 'Sales to date' : 'Sales') . ($d === null ? '' : ' · ' . ($d < 0 ? '▼' : '▲') . abs($d) . '%'), $d === null ? 'neutral' : ($d < 0 ? 'bad' : 'good'), $what[0])];
+        if ($fc) $cw[] = $card('fa-solid fa-flag-checkered', '~' . $short($fc['projected']) . ' MT', 'Month-end forecast · last ' . $short($fc['prev_month_total']), $fc['projected'] < $fc['prev_month_total'] ? 'bad' : 'good', $what[1] ?? '');
+        if ($c['op_h'] && $p['op_h']) { $h = $this->pct($c['op_h'], $p['op_h']); $cw[] = $card('fa-solid fa-clock', ($h < 0 ? '▼' : '▲') . abs($h) . '%', 'Operating hours', $h < 0 ? 'bad' : 'good', end($what)); }
+        $cy = [];
+        foreach (array_slice($netDown ? $neg : $pos, 0, 3) as $x) {
+            $f = $x['factors'][0] ?? null;
+            $cy[] = $card($fIcon[$f['key'] ?? ''] ?? 'fa-solid fa-location-dot', $x['code'], ($x['delta'] < 0 ? '−' : '+') . $short(abs($x['delta'])) . ' MT · ' . ($names[$f['key'] ?? ''] ?? 'site change'),
+                $x['delta'] < 0 ? 'bad' : 'good', $f['text'] ?? '');
+        }
+        if ($count) { $k0 = array_key_first($count); $cy[] = $card($fIcon[$k0] ?? 'fa-solid fa-magnifying-glass-chart', $count[$k0] . ' sites', 'Top cause · ' . ($names[$k0] ?? $k0), 'warn', end($why)); }
+        if (!$cy && $why) $cy[] = $card('fa-solid fa-circle-info', '—', 'No comparison data yet', 'neutral', $why[0]);
+        $sevIcon = ['critical' => 'fa-solid fa-circle-exclamation', 'high' => 'fa-solid fa-triangle-exclamation', 'medium' => 'fa-solid fa-circle-info', 'low' => 'fa-regular fa-lightbulb'];
+        $cd = array_map(fn ($a) => $card($sevIcon[$a['sev']] ?? 'fa-solid fa-bolt', trim(explode(' — ', preg_replace('/\s*\(.*?\)/', '', $a['title']))[0]), $a['owner'] . ' · ' . $a['cat'],
+            $a['sev'] === 'critical' ? 'bad' : ($a['sev'] === 'high' ? 'warn' : 'neutral'), $a['action']), array_slice($actions, 0, 3));
+        return ['what' => $what, 'why' => $why, 'do' => $do, 'cards' => ['what' => $cw, 'why' => $cy, 'do' => $cd],
             'counts' => ['critical' => $sev['critical'] ?? 0, 'high' => $sev['high'] ?? 0, 'medium' => $sev['medium'] ?? 0, 'low' => $sev['low'] ?? 0],
             'tone' => $d === null ? 'neutral' : ($d <= -10 ? 'bad' : ($d >= 5 ? 'good' : 'neutral'))];
     }

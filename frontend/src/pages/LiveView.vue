@@ -4,7 +4,7 @@
     <div class="row g-3 mt-1">
       <div class="col-lg-4 col-md-6" v-for="c in cams" :key="c.id">
         <div class="card overflow-hidden">
-          <div class="ratio ratio-16x9 position-relative" style="background:#0b0f16">
+          <div class="ratio ratio-16x9 position-relative" style="background:#1a1a1a">
             <div class="position-absolute top-0 start-0 m-2 text-danger small fw-bold">● LIVE</div>
             <div class="position-absolute top-0 end-0 m-2"><span class="pill" :class="c.type==='drone'?'pill-iso':'pill-gray'">{{ c.type }}</span></div>
             <div class="d-flex align-items-center justify-content-center text-secondary"><i class="fa-solid fa-play" style="font-size:28px"></i></div>

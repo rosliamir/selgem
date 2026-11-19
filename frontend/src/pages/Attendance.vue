@@ -1,16 +1,12 @@
 <template>
   <div class="page-wrap">
-    <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
-      <div>
-        <h1 class="page-h1">Attendance Management</h1>
-        <p class="page-sub">Real-time personnel monitoring <span class="text-muted2 ms-1">· <i class="fa-solid fa-check text-secondary"></i> Last synced 12:20 AM</span>
-          <span v-if="live" class="badge-live ms-2"><span class="dot"></span>Live</span></p>
-      </div>
-      <div style="width:260px"><DropdownSelect v-model="siteFilter" :options="siteOptions" searchable/></div>
-    </div>
+    <PageBar>
+      <span v-if="live" class="badge-live"><span class="dot"></span>Live</span>
+      <div style="width:240px"><DropdownSelect v-model="siteFilter" :options="siteOptions" searchable/></div>
+    </PageBar>
 
     <!-- decision intelligence overview -->
-    <AttendanceInsights class="mt-3" :office="siteFilter==='all' ? null : siteFilter"
+    <AttendanceInsights :office="siteFilter==='all' ? null : siteFilter"
       @view="openView" @office="v => siteFilter = v" @day="d => { tab='Daily'; dateStr=d; loadDaily(); scrollToDaily() }"/>
 
     <div class="utabs" id="att-tabs">
@@ -53,7 +49,7 @@
 
     <!-- MONTHLY -->
     <template v-else-if="tab==='Monthly'">
-      <div class="row g-3 mt-2"><div class="col-lg-3"><div class="stat-tile acc" style="--c:#0d6efd"><div class="tile-label">Total Staff</div><div class="tile-num" style="color:#0d6efd">{{ gridStaff.length }}</div></div></div></div>
+      <div class="row g-3 mt-2"><div class="col-lg-3"><div class="stat-tile acc" style="--c:#6b4feb"><div class="tile-label">Total Staff</div><div class="tile-num" style="color:#6b4feb">{{ gridStaff.length }}</div></div></div></div>
       <div class="card p-4 mt-3">
         <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
           <h6 class="fw-bold mb-0 me-2">Monthly Attendance</h6>
@@ -88,8 +84,8 @@
           <button class="btn-close-x" @click="viewStaff=null"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="d-flex gap-2 flex-wrap my-3">
-          <span class="chip"><span class="dotc" style="background:#16603a"></span>Present</span><span class="chip"><span class="dotc" style="background:#d6c84a"></span>Late</span>
-          <span class="chip"><span class="dotc" style="background:#b32020"></span>Absent</span><span class="chip"><span class="dotc" style="background:#64748b"></span>On Leave</span><span class="chip"><span class="sq"></span>Workdays</span>
+          <span class="chip"><span class="dotc" style="background:#0b5e2f"></span>Present</span><span class="chip"><span class="dotc" style="background:#d6c84a"></span>Late</span>
+          <span class="chip"><span class="dotc" style="background:#a11b1b"></span>Absent</span><span class="chip"><span class="dotc" style="background:#6b6b6b"></span>On Leave</span><span class="chip"><span class="sq"></span>Workdays</span>
         </div>
         <div class="card p-3">
           <div class="text-center fw-bold text-muted2 mb-3" style="letter-spacing:.05em">{{ monthLabel.toUpperCase() }} — ATTENDANCE CALENDAR</div>
@@ -127,6 +123,7 @@
   </div>
 </template>
 <script setup>
+import PageBar from '../components/PageBar.vue'
 import { ref, computed, watch, onMounted } from 'vue'
 import { load, apiGet, token } from '../services/api'
 import DropdownSelect from '../components/DropdownSelect.vue'
@@ -153,8 +150,8 @@ function stPill(s){return {present:'pill-green',late:'pill-amber',absent:'pill-r
 const abbr=s=>({present:'P',late:'L',absent:'A',on_leave:'OL'}[s]||'')
 
 const cards=computed(()=>{ const s=daily.value.summary||{}; return [
-  {k:'Total Staff',v:s.total??0,c:'#0d6efd'},{k:'Present This Day',v:s.present??0,c:'#2e9865'},
-  {k:'Late/Missing',v:s.late??0,c:'#eab308'},{k:'Absent',v:s.absent??0,c:'#dc2626'},{k:'On Leave',v:s.on_leave??0,c:'#94a3b8'}]})
+  {k:'Total Staff',v:s.total??0,c:ACC()},{k:'Present This Day',v:s.present??0,c:'#0e7c3d'},
+  {k:'Late/Missing',v:s.late??0,c:'#e5bf29'},{k:'Absent',v:s.absent??0,c:'#cf2323'},{k:'On Leave',v:s.on_leave??0,c:'#868686'}]})
 const dailyRows=computed(()=> (daily.value.rows||[])
   .filter(r=> statusFilter.value==='all' || r.status===statusFilter.value)
   .filter(r=> siteFilter.value==='all' || r.office_code===siteFilter.value)
@@ -189,7 +186,7 @@ const viewStats=computed(()=>{ if(!viewStaff.value) return []
     if(st==='present')p++; else if(st==='late')l++; else if(st==='absent')a++; else if(st==='on_leave')ol++
     if(st || (!d.weekend && d.n<=lastDay)) wd++ })
   const pct= wd? Math.round(((p+l)/wd)*100):0
-  return [{k:'WORKING DAYS',v:wd,c:'#0d6efd'},{k:'PRESENT %',v:pct+' %',c:'#111827'},{k:'PRESENT',v:p,c:'#15803d'},{k:'LATE',v:l,c:'#b59f0a'},{k:'ABSENT',v:a,c:'#b32020'},{k:'ON LEAVE',v:ol,c:'#64748b'}] })
+  return [{k:'WORKING DAYS',v:wd,c:ACC()},{k:'PRESENT %',v:pct+' %',c:'#1a1a1a'},{k:'PRESENT',v:p,c:'#0b5e2f'},{k:'LATE',v:l,c:'#9d841c'},{k:'ABSENT',v:a,c:'#a11b1b'},{k:'ON LEAVE',v:ol,c:'#6b6b6b'}] })
 
 async function openView(row){
   month.value=new Date(new Date(dateStr.value).getFullYear(), new Date(dateStr.value).getMonth(), 1)
@@ -203,42 +200,42 @@ function setMonthly(){ tab.value='Monthly'; if(!gridStaff.value.length) loadGrid
 onMounted(async()=>{ sites.value=await load('sites'); await loadDaily() })
 </script>
 <style scoped>
-.acc{border-left:3px solid var(--c)!important;border-radius:10px}
-.date-box{display:flex;align-items:center;gap:8px;border:1px solid #dee2e6;border-radius:12px;padding:.4rem .75rem}
-.date-box input{border:0;outline:0;font:inherit;color:#374151}
-.btn-view{border:1px solid #d1d5db;background:#fff;border-radius:10px;font-weight:700;font-size:12px;padding:.35rem .9rem;color:#111827}
-.btn-view:hover{background:#111827;color:#fff;border-color:#111827}
-.badge-live{display:inline-flex;align-items:center;gap:6px;background:#dcfce7;color:#15803d;font-weight:700;font-size:11px;padding:.15rem .55rem;border-radius:999px}
-.badge-live .dot{width:7px;height:7px;border-radius:50%;background:#15803d;animation:pulse 1.4s infinite}
+.acc{border-left:3px solid var(--c)!important;border-radius:8px}
+.date-box{display:flex;align-items:center;gap:8px;border:1px solid var(--g200);border-radius:8px;padding:.4rem .75rem}
+.date-box input{border:0;outline:0;font:inherit;color:var(--g800)}
+.btn-view{border:1px solid var(--g300);background:var(--surface);border-radius:8px;font-weight:700;font-size:12px;padding:.35rem .9rem;color:var(--g1000)}
+.btn-view:hover{background:var(--inverse);color:#fff;border-color:var(--g1000)}
+.badge-live{display:inline-flex;align-items:center;gap:6px;background:var(--ok-bg);color:var(--ok-fg);font-weight:700;font-size:11px;padding:.15rem .55rem;border-radius:999px}
+.badge-live .dot{width:7px;height:7px;border-radius:50%;background:var(--ok-fg);animation:pulse 1.4s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.month-nav{display:flex;align-items:center;gap:14px;border:1px solid #e5e7eb;border-radius:12px;padding:.4rem 1rem}
-.month-nav button{border:0;background:transparent;color:#6b7280}
-.legend{display:flex;align-items:center;gap:18px;background:#f8fafc;border-radius:10px;padding:.5rem .9rem;font-size:12px}
-.legend .lg{display:inline-flex;align-items:center;gap:6px;color:#475569}
-.cell{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:7px;font-size:11px;font-weight:700;color:#fff}
-.cell.P{background:#16603a}.cell.L{background:#d6c84a;color:#4a4310}.cell.A{background:#b32020}.cell.OL{background:#2563eb}
-.grid-scroll{overflow:auto;max-height:70vh;border:1px solid #eef0f3;border-radius:12px}
+.month-nav{display:flex;align-items:center;gap:14px;border:1px solid var(--g200);border-radius:8px;padding:.4rem 1rem}
+.month-nav button{border:0;background:transparent;color:var(--g600)}
+.legend{display:flex;align-items:center;gap:18px;background:var(--g50);border-radius:8px;padding:.5rem .9rem;font-size:12px}
+.legend .lg{display:inline-flex;align-items:center;gap:6px;color:var(--g700)}
+.cell{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:4px;font-size:11px;font-weight:700;color:#fff}
+.cell.P{background:var(--ok-fg)}.cell.L{background:#d6c84a;color:var(--warn-fg)}.cell.A{background:var(--bad-fg)}.cell.OL{background:var(--pri)}
+.grid-scroll{overflow:auto;max-height:70vh;border:1px solid var(--g200);border-radius:8px}
 .mtable{border-collapse:separate;border-spacing:0;width:max-content;min-width:100%}
-.mtable th,.mtable td{padding:8px 10px;text-align:center;border-bottom:1px solid #f1f5f9;font-size:12px;white-space:nowrap}
-.mtable thead th{position:sticky;top:0;background:#fff;color:#9aa3b2;font-size:10px;z-index:2}
-.mtable th.wknd,.mtable td.wknd{background:#fafbfc;color:#cbd5e1}
-.sticky.stf{position:sticky;left:0;background:#fff;text-align:left;min-width:230px;z-index:3}
-.sticky.sr{position:sticky;left:230px;background:#fff;text-align:left;min-width:150px;z-index:3}
+.mtable th,.mtable td{padding:8px 10px;text-align:center;border-bottom:1px solid var(--g100);font-size:12px;white-space:nowrap}
+.mtable thead th{position:sticky;top:0;background:var(--surface);color:var(--g500);font-size:10px;z-index:2}
+.mtable th.wknd,.mtable td.wknd{background:var(--g50);color:var(--g300)}
+.sticky.stf{position:sticky;left:0;background:var(--surface);text-align:left;min-width:230px;z-index:3}
+.sticky.sr{position:sticky;left:230px;background:var(--surface);text-align:left;min-width:150px;z-index:3}
 .mtable thead th.sticky{z-index:4}
-.site-badge{display:inline-block;background:#3b82f6;color:#fff;font-size:10px;font-weight:700;border-radius:999px;padding:.1rem .5rem;margin-right:4px}
-.modal-backdrop-c{position:fixed;inset:0;background:rgba(15,23,42,.45);display:grid;place-items:center;z-index:2000;padding:20px}
-.modal-card{background:#fff;border-radius:18px;padding:24px;width:100%;max-width:620px;max-height:92vh;overflow:auto;box-shadow:0 30px 80px rgba(0,0,0,.3)}
-.btn-close-x{border:0;background:transparent;font-size:18px;color:#6b7280}
-.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid #e5e7eb;border-radius:999px;padding:.25rem .7rem;font-size:12px;font-weight:600}
-.chip .dotc{width:9px;height:9px;border-radius:50%}.chip .sq{width:11px;height:11px;border:1px solid #cbd5e1;border-radius:3px}
+.site-badge{display:inline-block;background:var(--pri-400);color:#fff;font-size:10px;font-weight:700;border-radius:999px;padding:.1rem .5rem;margin-right:4px}
+.modal-backdrop-c{position:fixed;inset:0;background:rgba(26,26,26,.45);display:grid;place-items:center;z-index:2000;padding:20px}
+.modal-card{background:var(--surface);border-radius:12px;padding:24px;width:100%;max-width:620px;max-height:92vh;overflow:auto;box-shadow:0 30px 80px rgba(0,0,0,.3)}
+.btn-close-x{border:0;background:transparent;font-size:18px;color:var(--g600)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--g200);border-radius:999px;padding:.25rem .7rem;font-size:12px;font-weight:600}
+.chip .dotc{width:9px;height:9px;border-radius:50%}.chip .sq{width:11px;height:11px;border:1px solid var(--g300);border-radius:4px}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
-.cal-dow{text-align:center;font-weight:700;color:#475569;font-size:13px;padding-bottom:4px}
-.cal-day{height:48px;border-radius:10px;display:grid;place-items:center;font-weight:700;color:#334155;background:#fff;border:1px solid #f1f5f9}
-.cal-day.P{background:#16603a;color:#fff;border-color:#16603a}.cal-day.L{background:#d6c84a;color:#4a4310;border-color:#d6c84a}
-.cal-day.A{background:#b32020;color:#fff;border-color:#b32020}.cal-day.OL{background:#2563eb;color:#fff;border-color:#2563eb}.cal-day.wk{color:#cbd5e1}
-.mini-stat{background:#f8fafc;border-radius:12px;padding:14px;text-align:center}
-.mini-num{font-size:26px;font-weight:800}.mini-lbl{font-size:11px;font-weight:700;color:#64748b;letter-spacing:.04em}
-.dropzone{border:2px dashed #cbd5e1;border-radius:14px;padding:46px;text-align:center}
-.dz-ic{width:72px;height:72px;border-radius:50%;background:#eef4ff;color:#0d6efd;display:grid;place-items:center;font-size:26px;margin:0 auto}
-.note{background:#f8fafc;border-radius:12px;padding:16px}
+.cal-dow{text-align:center;font-weight:700;color:var(--g700);font-size:13px;padding-bottom:4px}
+.cal-day{height:48px;border-radius:8px;display:grid;place-items:center;font-weight:700;color:var(--g800);background:var(--surface);border:1px solid var(--g100)}
+.cal-day.P{background:var(--ok-fg);color:#fff;border-color:var(--ok-fg)}.cal-day.L{background:#d6c84a;color:var(--warn-fg);border-color:#d6c84a}
+.cal-day.A{background:var(--bad-fg);color:#fff;border-color:var(--bad-fg)}.cal-day.OL{background:var(--pri);color:#fff;border-color:var(--pri)}.cal-day.wk{color:var(--g300)}
+.mini-stat{background:var(--g50);border-radius:8px;padding:14px;text-align:center}
+.mini-num{font-size:26px;font-weight:700}.mini-lbl{font-size:11px;font-weight:700;color:var(--g600);letter-spacing:.04em}
+.dropzone{border:2px dashed var(--g300);border-radius:8px;padding:46px;text-align:center}
+.dz-ic{width:72px;height:72px;border-radius:50%;background:var(--pri-soft);color:var(--pri);display:grid;place-items:center;font-size:26px;margin:0 auto}
+.note{background:var(--g50);border-radius:8px;padding:16px}
 </style>
